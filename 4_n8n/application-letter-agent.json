@@ -1,0 +1,429 @@
+{
+  "name": "application-letter-agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        3344,
+        1440
+      ],
+      "id": "1911f44d-2b9c-41de-b5cc-4e7712e6a07e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{ \"competenceFilePath\": \"/workspace/jobs/candidates/example_user/1_profile/competence-profile.md\" }\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3808,
+        1872
+      ],
+      "id": "5fa3bd1e-d269-418b-a526-83b6b839adde",
+      "name": "path competence profile"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4480,
+        1872
+      ],
+      "id": "dea5def8-c42a-41e8-a16b-0d439ff20ae6",
+      "name": "merge competence profile with each job in one table"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{$json.jobFilePath}}/*.md",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4048,
+        1664
+      ],
+      "id": "38652972-aa73-4e0d-a1da-7bdc5e35b69c",
+      "name": "fetch job.mds from repo",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "notesInFlow": true,
+      "notes": "couldn't fetch data "
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{$json.competenceFilePath}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4048,
+        1872
+      ],
+      "id": "89a7bbda-4a23-4317-aa9b-ae8273188612",
+      "name": "fetch profile.md from repo",
+      "alwaysOutputData": true,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "binaryPropertyName": "=data",
+        "destinationKey": "extracted",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        4272,
+        1872
+      ],
+      "id": "38bb06c0-a5a0-440d-bfd9-d6598ac01694",
+      "name": "extract competence content ",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n    jobText: $json.extracted,\n    index: $itemIndex,\n    fileName: $binary.data.fileName,\n};\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4480,
+        1664
+      ],
+      "id": "a9a012e6-bd8b-4135-b413-d71d965e4469",
+      "name": "transform json into object with indexes"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a strategic application writer crafting letters that create an irresistible \"YES\" from HR recruiters (keywords/culture fit), technical managers (depth/capability), and decision makers (strategic value).\n\n**⚠️ LANGUAGE RULE: Write the letter in the SAME language as the main job description text (English job → English letter, German job → German letter). Ignore location names and job title suffixes when determining language.**\n\n---\n\n**🚨 CRITICAL FIRST STEP — Language Detection:**\n\n**BEFORE writing anything, analyze the MAIN JOB DESCRIPTION TEXT language (not just location or title):**\n\n**HOW TO DETECT:**\n\n1. **Look at the actual job description paragraphs** — ignore locations, job title suffixes \"(m/f/d)\", or metadata\n2. **Check the responsibilities, requirements, and qualifications sections** — what language are these written in?\n3. **Determine the PRIMARY language** of the core job content\n\n**THEN APPLY THIS RULE:**\n\n- If the **MAIN JOB DESCRIPTION** is written in **ENGLISH** → Write application letter in **ENGLISH**\n- If the **MAIN JOB DESCRIPTION** is written in **GERMAN** → Write application letter in **GERMAN**\n\n**EXAMPLES:**\n\n- **DO:** Job says \"We are looking for a talented engineer...\" or \"Join our team...\" → **ENGLISH letter**\n- **DO:** Job says \"Wir suchen einen engagierten Mitarbeiter...\" or \"Sie bringen mit...\" → **GERMAN letter**\n- **IGNORE:** Location in German like \"München\", \"Berlin\", \"Düsseldorf und Umgebung\" — this is NOT the job description language\n- **IGNORE:** German gender notation \"(m/f/d)\" or \"(w/m/d)\" in job titles — this is NOT the job description language\n\n**The application letter language MUST match the CORE JOB DESCRIPTION language — no exceptions.**\n\nThis ensures cultural fit, meets recruiter expectations, and maximizes your chances of success.\n\n---\n\n**Core Strategy — The \"Perfect Match\" Framework:**\n\nYour goal is to create the strongest possible perception of candidate-job alignment, even when not all skills are a perfect match. Follow the \"Confident Capability Positioning\" approach:\n\n1. **Match & Mirror Job Language:** Use exact terminology from the job description throughout the letter\n2. **Highlight Transferable Excellence:** Frame related experiences as directly applicable to job requirements\n3. **Project Confident Capability:** Position the candidate as someone who can quickly master any gaps through proven learning ability\n4. **Emphasize Growth Trajectory:** Show the candidate is on an upward path that naturally leads to this role\n5. **Create Technical Credibility:** Demonstrate deep understanding of the role's challenges and how to solve them\n\n**Balanced Appeal Strategy:**\n\n- **For HR Recruiters (30%):** Include key screening terms, cultural fit signals, soft skills, and enthusiasm\n- **For Technical Staff (50%):** Demonstrate hands-on expertise, technical depth, problem-solving capability, and tool/methodology mastery\n- **For Leadership (20%):** Show strategic thinking, business impact awareness, and team contribution potential\n\n**Critical Requirements:**\n\n• **Keyword Optimization:** Every major requirement from the job description MUST be addressed or echoed in the letter\n• **Confident Framing:** Present ALL experiences as valuable preparation for this role (no apologetic language)\n• **\"Fake It Till You Make It\" Principle:** Frame learning agility and related experience as equivalent to direct experience\n• **Technical Credibility Signals:** Use industry-specific language, demonstrate understanding of technical challenges, reference relevant methodologies/tools\n• **Capability Assumption:** Write as if the candidate is already doing this job — focus on \"how I will excel\" not \"whether I can\"\n• **ATS Optimization:** Integrate job-specific keywords seamlessly into natural, flowing sentences for maximum screening compatibility\n• **Authentic Human Voice:** Write as a genuine person with real enthusiasm, not a formulaic template — avoid robotic patterns and corporate jargon\n• **Concise Impact:** Maximum 300-400 words — every sentence must serve a purpose, no filler content\n\n**Advanced Positioning Techniques:**\n\n1. **Gap Bridging:** For missing skills, emphasize:\n   - \"Quickly mastered [similar technology] in [short timeframe]\"\n   - \"Familiar with [related concept], excited to deepen expertise in [required skill]\"\n   - \"Proven track record of rapid learning in [comparable domain]\"\n\n2. **Experience Translation:** Reframe experiences to match job requirements:\n   - Defense industry → Automotive: \"Safety-critical systems, rigorous compliance, V-Model\"\n   - Research → Industry: \"Hands-on implementation, deadline-driven delivery, cross-functional collaboration\"\n   - Different tech stack → Required stack: \"Strong foundation in [X], directly applicable to [Y]\"\n\n3. **Confidence Language Patterns:**\n   - Use: \"I bring,\" \"I have demonstrated,\" \"I excel at,\" \"I am well-positioned to\"\n   - Avoid: \"I would like to,\" \"I hope to,\" \"I am eager to learn,\" \"Although I haven't\"\n\n4. **Technical Depth Demonstration:**\n   - Reference specific methodologies, standards, or tools from the job posting\n   - Show understanding of the role's technical challenges\n   - Use industry jargon naturally and accurately\n\n**Letter Structure:**\n\n**Opening (Bold Hook):**\n- Address the hiring team with energy and specificity\n- Lead with the strongest match statement possible\n- Create immediate \"this candidate gets it\" reaction\n\n**Body Paragraph 1 (Technical Excellence):**\n- Map 3-4 core technical requirements to specific achievements\n- Use concrete examples with metrics where possible\n- Mirror job description language precisely\n- Demonstrate hands-on capability and depth\n\n**Body Paragraph 2 (Transferable Value & Growth):**\n- Address any experience gaps with confident bridging statements\n- Show rapid learning ability with past examples\n- Connect diverse background as unique advantage\n- Frame career trajectory as naturally leading here\n\n**Body Paragraph 3 (Strategic Fit & Soft Skills):**\n- Address team collaboration, communication, cultural fit\n- Show understanding of company's mission/challenges\n- Demonstrate business impact awareness\n- Weave in soft skills naturally (not a list)\n\n**Closing (Confident Call to Action):**\n- Express strong interest and readiness\n- Invite conversation with specific value proposition\n- Professional yet approachable tone\n- Include contact willingness\n- IMPORTANT: Do NOT include a sign-off, greeting, or the candidate's name in the closing paragraph (for example: \"Sincerely, [Your Name]\" or \"Mit freundlichen Grüßen, [Your Name]\"). The LaTeX template will insert the final signature and name. Only include readiness, a concise call to action, and availability details in this paragraph.\n\n**Tone & Style Guidelines:**\n\n- **Confident but not arrogant:** \"I bring proven expertise\" not \"I am the best\"\n- **Specific but concise:** Use concrete examples, avoid lengthy stories\n- **Modern and human:** Natural language, avoid corporate clichés\n- **Technically credible:** Show you understand the domain deeply\n- **Action-oriented:** Focus on what you will contribute, not what you hope to gain\n- **Authentic voice:** Write as a real person, not a template — vary sentence structure, use personal anecdotes, show genuine enthusiasm\n- **Conversational yet professional:** Sound like you're speaking to a colleague, not writing a formal business letter\n- **Concise and focused:** Aim for 300-400 words maximum — every sentence must add value\n- **ATS-optimized:** Include job-specific keywords naturally within flowing sentences, not as keyword stuffing\n\n**Critical Success Criteria:**\n\nAfter reading, the reviewer should think:\n\n• \"This candidate understands exactly what we need\"\n• \"They have the technical depth to contribute from day one\"\n• \"Even if they haven't done X, they clearly can learn it quickly\"\n• \"This person will fit our team culture\"\n• \"We need to interview this candidate\"\n• \"This sounds like a real person I want to meet, not a generic template\"\n• \"The letter passed our ATS screening and hit all the right keywords naturally\"\n\n**Instructions:**\n\n- Address the letter to the recruiter or hiring team (if available)\n- Extract and mirror key terms from job description throughout\n- Make EVERY job requirement feel addressed (directly or through transferable skills)\n- Use natural, confident, human-sounding language\n- Balance technical credibility with approachability\n- **Keep it concise:** 300-400 words maximum — remove any filler, make every word count\n- **Sound authentic:** Write as a real person with genuine voice, vary sentence rhythm, avoid templated phrases\n- **Optimize for ATS:** Naturally weave job-specific keywords into sentences without keyword stuffing\n- Output in Markdown format\n\n---\n\n## CRITICAL: Language Detection and Matching Rule\n\n**BEFORE writing the application letter, you MUST determine the language of the MAIN JOB DESCRIPTION TEXT:**\n\n**Step-by-step process:**\n\n1. **Read the core job description paragraphs** — focus on responsibilities, requirements, qualifications sections\n2. **Identify the PRIMARY language** of the actual job content (NOT location, NOT title suffixes like \"(m/f/d)\")\n3. **Write the application letter in the SAME language** as the main job description\n\n**Language Matching Rules:**\n\n**DO - Write application letter in:**\n\n- **ENGLISH** if main job description text is in ENGLISH\n- **GERMAN** if main job description text is in GERMAN\n- **PREDOMINANT language** if job description is MIXED (check which language is used in most paragraphs)\n- **Company location language** if unsure (German companies → German, international → English)\n\n**IGNORE - These do NOT determine letter language:**\n\n- Location names in German (e.g., \"München\", \"Berlin\", \"Stuttgart\", \"Düsseldorf und Umgebung\")\n- German gender notation in job titles (e.g., \"(m/f/d)\", \"(w/m/d)\")\n\n**This is NON-NEGOTIABLE:** The application letter language MUST match the CORE JOB DESCRIPTION TEXT language for maximum cultural fit and recruiter expectations.\n\n---\n\n---\n\n## Special Instructions for German Job Profiles\n\n**When the job profile is provided in German, apply ALL the above instructions with these additional requirements for maximum cultural fit and natural language quality:**\n\n1. **Write the entire letter in German** — use natural, professional German business language\n2. **Apply German business communication standards:**\n   - Use formal address (\"Sie\" form) unless the company culture clearly indicates otherwise (e.g., startup with \"Du\" culture)\n   - Start with \"Sehr geehrte Damen und Herren\" or \"Sehr geehrtes [Company] Team\" or specific name if known\n   - End with \"Mit freundlichen Grüßen\" but do NOT append the candidate's name or signature in the paragraph. The LaTeX template will add the formal signature and name.\n3. **Cultural adaptation for German market:**\n   - German applications tend to be slightly more formal than English ones — maintain professional tone while keeping the human voice\n   - Avoid overly American-style enthusiasm — keep confidence balanced with professionalism\n   - Use industry-specific German terminology (not direct translations) — e.g., \"Prozessoptimierung\" not \"Prozess-Optimierung\"\n   - German recruiters value structured thinking and thoroughness — ensure logical flow and completeness\n4. **German keyword optimization:**\n   - Mirror exact German terms from the job posting (not English equivalents)\n   - Include German certifications, standards, and methodologies as mentioned in the job description (e.g., \"ISO 26262\", \"V-Modell\", \"agile Methoden\")\n   - Use German professional titles correctly (e.g., \"Diplom-Ingenieur\", \"M.Sc.\", \"Techniker\")\n5. **Language quality for German:**\n   - Write in clear, natural German — avoid anglicisms unless they are industry-standard (e.g., \"DevOps\", \"CI/CD\" are acceptable)\n   - Use appropriate German business expressions, not literal translations from English\n   - Vary sentence structure for natural rhythm in German (avoid overly long compound sentences typical of technical German)\n   - Ensure grammatical perfection — German recruiters are particularly sensitive to language errors\n6. **Apply all core strategies in German context:**\n   - The \"Perfect Match\" framework applies equally — just executed in German\n   - \"Gap Bridging\" and \"Experience Translation\" techniques work the same way\n   - Confidence language patterns should be adapted to German business communication style\n   - Technical depth demonstration is equally important in German applications\n\n**Example tone adaptation:**\n\n- English: \"I bring proven expertise in...\"\n- German: \"Ich bringe fundierte Expertise in...\" or \"Mit langjähriger Erfahrung in...\"\n\n**Remember:** The goal remains the same — create an irresistible \"YES\" response — but executed with perfect German language quality and cultural appropriateness.\n\n---\n\n## Job Title\n\n{{$json.fileName}}\n\n## Job Description\n\n{{$json.jobText}}\n\n## Candidate Profile\n\n{{$json.extracted}}\n\n---\n\n**Output format:**\n\nReturn your response as a Markdown file with TWO sections:\n\n### 1. Frontmatter Block (at the very top):\n\n```yaml\n---\n# IMPORTANT: append a language suffix to the `fileName` so the generator can\n# detect the letter language automatically. Use `_DE` for German letters and\n# `_ENG` for English letters. Examples: `Head_of_IT_DE.md` or `Head_of_IT_ENG.md`.\nfileName: {{$json.fileName}}\nlanguage: [English/German - detected language]\n---\n```\n\n### 2. Application Letter Content (LaTeX-Compatible Format with Section Labels):\n\n**CRITICAL:** Output the letter content in **LaTeX `\\lettercontent{}` format** with **clear section labels** for easy parsing:\n\n```latex\n<!-- SALUTATION -->\n\\lettercontent{Dear [Recipient Name],}\n\n<!-- PARAGRAPH_1_INTRODUCTION -->\n\\lettercontent{\n[Your opening paragraph content here]\n}\n\n<!-- PARAGRAPH_2_TECHNICAL_EXCELLENCE -->\n\\lettercontent{\n[Your technical excellence paragraph content here]\n}\n\n<!-- PARAGRAPH_3_EXPERIENCE_AND_VALUE -->\n\\lettercontent{\n[Your experience and value paragraph content here]\n}\n\n<!-- PARAGRAPH_4_STRATEGIC_FIT -->\n\\lettercontent{\n[Your strategic fit paragraph content here]\n}\n\n<!-- PARAGRAPH_5_CLOSING_STATEMENT -->\n\\lettercontent{\n[Your closing statement paragraph content here]\n}\n```\n\n**Important formatting rules:**\n\n1. **Each paragraph MUST be in a separate `\\lettercontent{...}` block**\n2. **Each block MUST have a comment label** above it for parsing:\n   - `<!-- SALUTATION -->` for the opening\n   - `<!-- PARAGRAPH_1_INTRODUCTION -->` for first paragraph\n   - `<!-- PARAGRAPH_2_TECHNICAL_EXCELLENCE -->` for second paragraph\n   - `<!-- PARAGRAPH_3_EXPERIENCE_AND_VALUE -->` for third paragraph\n   - `<!-- PARAGRAPH_4_STRATEGIC_FIT -->` for fourth paragraph\n   - `<!-- PARAGRAPH_5_CLOSING_STATEMENT -->` for fifth paragraph\n3. **Opening salutation rules:**\n   - Extract the recipient name from the job posting if available (e.g., \"Ms. Anna Schmidt\", \"Mr. John Doe\", \"Hiring Manager\")\n   - If NO specific name is found, use: \"Hiring Manager\" (English) or \"Hiring Team\" (English) or \"Damen und Herren\" (German)\n   - Format: `\\lettercontent{Dear [Actual Name],}` for English\n   - Format: `\\lettercontent{Sehr geehrte/r [Actual Name],}` for German formal\n   - **NEVER leave the recipient blank** - always include a name or generic greeting\n4. **Write actual paragraph content** inside each `\\lettercontent{}` block (not placeholders)\n5. **Preserve paragraph structure** — don't merge paragraphs\n6. **No additional Markdown formatting** outside the `\\lettercontent{}` blocks and comment labels\n7. **LaTeX special characters** must be escaped:\n   - `&` → `\\&`\n   - `%` → `\\%`\n   - `$` → `\\$`\n   - `#` → `\\#`\n   - `_` → `\\_`\n   - `{` → `\\{`\n   - `}` → `\\}`\n   - `~` → `\\textasciitilde{}`\n   - `^` → `\\textasciicircum{}`\n\n**Example output structure:**\n\n**⚠️ CRITICAL:** Include HTML comment labels above each `\\lettercontent{}` block AND actual recipient name!\n\n```latex\n<!-- SALUTATION -->\n\\lettercontent{Dear Hiring Manager,}\n\n<!-- PARAGRAPH_1_INTRODUCTION -->\n\\lettercontent{\nI am writing to express my strong interest in the Senior Data Engineer position at TechCorp. With over five years of hands-on experience in building scalable data pipelines and my proven expertise in Python, Spark, and cloud architectures, I am well-positioned to deliver immediate value to your data engineering team.\n}\n\n<!-- PARAGRAPH_2_TECHNICAL_EXCELLENCE -->\n\\lettercontent{\nThroughout my career at DefenseTech Solutions, I have designed and implemented real-time data processing systems handling over 2TB of daily data, utilizing Apache Kafka, Spark, and AWS infrastructure. My work directly mirrors your requirements for building robust ETL pipelines and optimizing data warehouse performance. I bring deep expertise in SQL optimization, data modeling, and CI/CD best practices for data workflows.\n}\n\n<!-- PARAGRAPH_3_EXPERIENCE_AND_VALUE -->\n\\lettercontent{\nWhile my background is in defense systems, the technical challenges I've solved — ensuring data integrity, meeting strict performance SLAs, and maintaining security-critical infrastructure — translate directly to your automotive data platform needs. I have consistently demonstrated my ability to quickly master new domains, having migrated our entire data stack to Kubernetes within three months while maintaining zero downtime.\n}\n\n<!-- PARAGRAPH_4_STRATEGIC_FIT -->\n\\lettercontent{\nWhat excites me most about TechCorp is your commitment to leveraging data for autonomous driving innovation. I thrive in collaborative environments where data engineering directly enables product breakthroughs. My experience leading cross-functional data initiatives and mentoring junior engineers aligns perfectly with your team-oriented culture.\n}\n\n<!-- PARAGRAPH_5_CLOSING_STATEMENT -->\n\\lettercontent{\nI would welcome the opportunity to discuss how my technical expertise and proven track record can contribute to TechCorp's data engineering goals. Thank you for considering my application, and I look forward to speaking with you soon.\n}\n```\n\n**German example (if job is in German):**\n\n```latex\n<!-- SALUTATION -->\n\\lettercontent{Sehr geehrte Damen und Herren,}\n\n<!-- PARAGRAPH_1_INTRODUCTION -->\n\\lettercontent{\nHiermit bewerbe ich mich mit großem Interesse auf die Position als Senior Data Engineer bei TechCorp...\n}\n```\n\n**This format allows:**\n\n- Direct copy-paste into LaTeX templates\n- Easy parsing and integration with HTML comment labels\n- Clean separation of paragraphs with clear categories\n- Actual recipient names extracted from job posting\n- Minimal manual editing required\n\n---\n\n## IMPORTANT: Disallowed special characters policy\n\nAdd the following strict rule to the generator: the model MUST NOT emit backslashes (\\\\) or forward slashes (/) or any escape sequences inside the actual application text. The only special character that is allowed to appear in the application text is the ampersand (&) and it must be output as a plain ampersand character (not escaped). Concretely:\n\n- NEVER include any backslash (\\\\) characters in the application paragraphs or inside `\\\\lettercontent{...}` blocks. Examples of forbidden output: `\\\\&`, `\\\\newline`, `7\\\\+ years`, `some\\\\_value`.\n- NEVER include forward slash (`/`) characters in the application paragraphs unless the job content explicitly requires a URL — in that case prefer written words (e.g., \"and/or\") and avoid raw `/` characters.\n- You may include `&` as a plain ampersand character. Do NOT output `\\\\&`. The integration pipeline will escape ampersands for LaTeX (to `\\\\&`) when producing the final PDF.\n- DO NOT output any LaTeX commands (for example `\\\\newline`, `\\\\section`, `\\\\textbf{}`) inside the letter content. The only LaTeX macros allowed in the file are the surrounding `\\\\lettercontent{...}` markers and the document-level template; the model should provide plain text inside those markers.\n\nIf the model cannot express a concept without a character that would otherwise be disallowed, it must rewrite the phrase (e.g., write \"and/or\" instead of \"and/or\" using a slash). The output must be plain, human-readable text only, with no escape sequences or backslashes.\n\nWhy: this prevents accidentally writing literal escape sequences (like `\\\\&`) that break downstream LaTeX rendering or create artifacts in the generated markdown files. The pipeline that integrates model output into LaTeX will handle safe escaping for any LaTeX-sensitive characters.\n\nExample of correct vs incorrect output inside `\\\\lettercontent{}`:\n\n- Correct: `I led cross-functional teams for 7+ years and built data-driven products.`\n- Incorrect: `I led cross-functional teams for 7\\\\+ years and built data-driven products.`\n- Correct with ampersand: `Data & Analytics` (model outputs `&`, integration will escape to `\\\\&` for LaTeX)\n- Incorrect: `Data \\\\& Analytics` (model must not emit `\\\\`)\n\n\n\n",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        4720,
+        1872
+      ],
+      "id": "3f51e928-6bc1-4613-9456-6657aa29f6f4",
+      "name": "create prompt-> send to model ",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "OpenAI API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Updated parser for new LaTeX-compatible format with HTML comment labels\n// Handles YAML frontmatter and \\lettercontent{} blocks\n\nfunction pad(n){ return String(n).padStart(2,'0'); }\nconst d = new Date();\nconst dir = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;\n\n// zero-width & bidi controls commonly leaking from LLMs\nconst ZERO_WIDTH = /[\\u200B-\\u200D\\uFEFF]/g;          // ZWSP, ZWJ, ZWNJ, BOM\nconst BIDI       = /[\\u202A-\\u202E\\u2066-\\u2069]/g;   // LRE..RLO, LRI..PDI\n\nfunction sanitizeFileName(nameRaw) {\n  let name = String(nameRaw ?? '');\n\n  // normalize, strip controls, trim whitespace/newlines\n  name = name.normalize('NFKC')\n             .replace(ZERO_WIDTH, '')\n             .replace(BIDI, '')\n             .replace(/[\\r\\n\\t]/g, '')\n             .trim();\n\n  // remove illegal path chars and collapse spaces\n  name = name.replace(/[\\/\\\\?%*:|\"<>]/g, '-').replace(/\\s+/g, ' ');\n\n  // remove trailing dots/spaces (macOS treats them oddly)\n  name = name.replace(/[ .]+$/g, '');\n\n  // ensure .md extension exactly (ASCII)\n  // strip any weird suffix and re-append .md\n  const base = name.replace(/\\.[^.]*$/,'');  // remove last \"extension\" whatever it is\n  return `${base}.md`;\n}\n\nconst out = [];\n\nfor (const it of items) {\n  // Handle both structure types\n  // 1. OpenAI API format: choices[0].message.content\n  // 2. Direct format: message.content\n  const raw = it.json?.choices?.[0]?.message?.content \n           || it.json?.message?.content \n           || '';\n  \n  if (!raw || typeof raw !== 'string') continue;\n\n  // strip outer code fences if present\n  let cleaned = raw\n    .replace(/^```[a-z]*\\s*\\r?\\n/i, '')\n    .replace(/```$/, '')\n    .trim();\n\n  // NEW: Extract YAML frontmatter\n  // Format: ---\\nfileName: ...\\nlanguage: ...\\n---\n  const yamlMatch = cleaned.match(/^---\\s*\\r?\\n([\\s\\S]*?)\\r?\\n---\\s*\\r?\\n([\\s\\S]*)$/);\n  \n  let fileName, language, content;\n  \n  if (yamlMatch) {\n    // YAML frontmatter found\n    const frontmatter = yamlMatch[1];\n    content = yamlMatch[2].trim();\n    \n    // Extract fileName from frontmatter\n    const fileNameMatch = frontmatter.match(/fileName:\\s*([^\\r\\n]+)/i);\n    fileName = fileNameMatch ? sanitizeFileName(fileNameMatch[1]) : null;\n    \n    // Extract language (optional)\n    const langMatch = frontmatter.match(/language:\\s*([^\\r\\n]+)/i);\n    language = langMatch ? langMatch[1].trim() : 'Unknown';\n    \n  } else {\n    // Fallback to old format: fileName: at the start\n    const oldMatch = cleaned.match(/^fileName:\\s*([^\\r\\n]+)\\r?\\n{1,2}([\\s\\S]*)$/i);\n    if (!oldMatch) continue;\n    \n    fileName = sanitizeFileName(oldMatch[1]);\n    content = oldMatch[2].trim();\n    language = 'Unknown';\n  }\n  \n  if (!fileName || !content) continue;\n\n  // Content now includes HTML comments and \\lettercontent{} blocks\n  // Store as-is for direct LaTeX integration\n  const dataB64 = Buffer.from(content, 'utf8').toString('base64');\n\n  out.push({\n    json: { \n      fileName, \n      dir, \n      content,\n      language,  // NEW: Include detected language\n      format: 'latex'  // NEW: Indicate this is LaTeX-compatible format\n    },\n    binary: {\n      data: {\n        data: dataB64,\n        mimeType: 'text/markdown',\n        fileName\n      }\n    }\n  });\n}\n\nreturn out.length ? out : [{ json: { error: 'No files parsed / sanitized' } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5104,
+        1872
+      ],
+      "id": "6b6acae0-ed5e-4bfb-8f1e-afd52c80245c",
+      "name": "fetch gpt response in json for each job",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "binaryPropertyName": "=data",
+        "destinationKey": "=extracted",
+        "options": {
+          "keepSource": "binary"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3696,
+        1328
+      ],
+      "id": "a04a0ab5-4302-4f2c-a21e-c898d95ff2b0",
+      "name": "extract json obj. daily path ",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $json.extracted ?? [];\nreturn jobs.map(({ jobFilePath }) => ({ json: { jobFilePath } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3824,
+        1456
+      ],
+      "id": "37fd0f25-1966-4c9e-a736-fc42a62d8666",
+      "name": "parse & return path from json obj as json"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "binaryPropertyName": "=data",
+        "destinationKey": "extracted",
+        "options": {
+          "keepSource": "binary"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        4272,
+        1664
+      ],
+      "id": "d374693d-b623-453c-bcae-aaa6c7010595",
+      "name": "extract job profile",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fileSelector": "=/workspace/jobs/candidates/example_user/.latest_job.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3536,
+        1216
+      ],
+      "id": "5dfeeee1-921c-4c93-bc8b-5e7eebfca224",
+      "name": "reading json from \"create-daily-folders\"-workflow"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/workspace/jobs/candidates/example_user/2_applications-mds/{{ $json.dir }}/{{ $json.fileName }}\n",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4704,
+        1664
+      ],
+      "id": "ded0781a-46e2-4974-b221-735745424d6e",
+      "name": "write generated letters to repo",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "command": "node /workspace/jobs/normalize_mds.js /workspace/jobs"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4880,
+        1664
+      ],
+      "id": "5ba327ee-1cca-44ff-a80a-5f95b89dc674",
+      "name": ".js to normalise created .mds"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "path competence profile",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "reading json from \"create-daily-folders\"-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "path competence profile": {
+      "main": [
+        [
+          {
+            "node": "fetch profile.md from repo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge competence profile with each job in one table": {
+      "main": [
+        [
+          {
+            "node": "create prompt-> send to model ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch job.mds from repo": {
+      "main": [
+        [
+          {
+            "node": "extract job profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch profile.md from repo": {
+      "main": [
+        [
+          {
+            "node": "extract competence content ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract competence content ": {
+      "main": [
+        [
+          {
+            "node": "merge competence profile with each job in one table",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "transform json into object with indexes": {
+      "main": [
+        [
+          {
+            "node": "merge competence profile with each job in one table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create prompt-> send to model ": {
+      "main": [
+        [
+          {
+            "node": "fetch gpt response in json for each job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch gpt response in json for each job": {
+      "main": [
+        [
+          {
+            "node": "write generated letters to repo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract json obj. daily path ": {
+      "main": [
+        [
+          {
+            "node": "parse & return path from json obj as json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse & return path from json obj as json": {
+      "main": [
+        [
+          {
+            "node": "fetch job.mds from repo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract job profile": {
+      "main": [
+        [
+          {
+            "node": "transform json into object with indexes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reading json from \"create-daily-folders\"-workflow": {
+      "main": [
+        [
+          {
+            "node": "extract json obj. daily path ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "write generated letters to repo": {
+      "main": [
+        [
+          {
+            "node": ".js to normalise created .mds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "f4316445-f4df-4f8c-9b14-ef6b4c640767",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "REPLACE_WITH_YOUR_INSTANCE_ID"
+  },
+  "id": "REPLACE_WITH_YOUR_WORKFLOW_ID",
+  "tags": []
+}

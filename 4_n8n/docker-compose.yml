@@ -1,0 +1,66 @@
+# =============================================================================
+# n8n DOCKER COMPOSE CONFIGURATION
+# =============================================================================
+# This file configures n8n workflow automation for the application letter agent.
+#
+# SETUP INSTRUCTIONS:
+# 1. Install Docker Desktop: https://www.docker.com/products/docker-desktop
+# 2. Update the volume paths below to match YOUR system
+# 3. Change the default credentials (N8N_BASIC_AUTH_USER/PASSWORD)
+# 4. Run: docker compose up -d
+# 5. Open http://localhost:5678 in your browser
+# 6. Import the workflow: application-letter-agent.json
+#
+# IMPORTANT:
+# - The /workspace/jobs path inside the container maps to your repo folder
+# - All file paths in the n8n workflow use /workspace/jobs/ as the base
+# =============================================================================
+
+version: "3.8"
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # Timezone - adjust to your location
+      - TZ=Europe/Berlin
+      - GENERIC_TIMEZONE=Europe/Berlin
+      
+      # Authentication - CHANGE THESE before deploying!
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=CHANGE_ME_TO_A_SECURE_PASSWORD
+      
+      # n8n settings
+      - N8N_SECURE_COOKIE=false
+      - N8N_PROTOCOL=http
+      - N8N_HOST=localhost
+      - N8N_AI_ENABLED=true
+      - WEBHOOK_URL=http://localhost:5678
+    
+    volumes:
+      # n8n data storage - stores workflows, credentials, etc.
+      # Change the LEFT side to your preferred data directory
+      # Example macOS: /Users/YOUR_USERNAME/n8n/n8n_data
+      # Example Linux: /home/YOUR_USERNAME/n8n/n8n_data
+      # Example Windows: C:/Users/YOUR_USERNAME/n8n/n8n_data
+      - ./n8n_data:/home/node/.n8n
+      
+      # Repository mount - this is where n8n reads/writes job files
+      # Change the LEFT side to your repository path
+      # The RIGHT side (/workspace/jobs) must stay the same!
+      # Example macOS: /Users/YOUR_USERNAME/JobMatchAI:/workspace/jobs
+      # Example Linux: /home/YOUR_USERNAME/JobMatchAI:/workspace/jobs
+      # Example Windows: C:/Users/YOUR_USERNAME/JobMatchAI:/workspace/jobs
+      - ../:/workspace/jobs
+
+# =============================================================================
+# QUICK COMMANDS:
+#   Start:   docker compose up -d
+#   Stop:    docker compose down
+#   Logs:    docker compose logs -f
+#   Restart: docker compose restart
+# =============================================================================

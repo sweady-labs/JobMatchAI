@@ -1,0 +1,203 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Modern Cover Letter Template (Deedy-style)
+% 
+% INSTRUCTIONS:
+% 1. Copy this file to src/applications/
+% 2. Rename: YYYY-MM-DD_CompanyName_Position.tex
+% 3. Replace all {{PLACEHOLDERS}} with your content
+% 4. Compile: ./compile.sh your_file.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[10pt]{article}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shadows}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+
+\geometry{left=18mm,right=18mm,top=12mm,bottom=12mm}
+\definecolor{accent}{HTML}{0B4671}
+\definecolor{muted}{HTML}{666666}
+\definecolor{linkedin}{HTML}{0A66C2}
+
+% Hyperref settings: remove boxed links and use colored links. Keep general URLs muted;
+% individual links (e.g., LinkedIn) can be explicitly colored where desired.
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  citecolor=accent,
+  filecolor=accent,
+  urlcolor=muted
+}
+
+% Font selection: the parser can inject a custom \setmainfont call via the
+% {{MAIN_FONT_SETUP}} placeholder. If no font is provided via the parser,
+% the parser will insert the default selection logic here.
+{{MAIN_FONT_SETUP}}
+
+% Slightly increase base line spacing for readability
+\linespread{1.03}
+
+% Profile picture size & macro with subtle drop shadow
+\newcommand{\profilepicsize}{2.6cm}
+\newcommand{\profilepic}[1]{%
+  	\tikz[baseline=(img.base)] \node[inner sep=0pt,rounded corners=2pt,drop shadow] (img) {\includegraphics[width=\profilepicsize,keepaspectratio]{#1}};%
+}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+% Page numbers removed for single-page cover letters
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+
+% Simple Deedy-like macros
+\newcommand{\namesection}[3]{%
+  \begin{minipage}[t]{0.72\textwidth}
+    {\LARGE\bfseries #1~#2}\\
+    {\small #3}
+  \end{minipage}\hfill
+}
+
+\newcommand{\companyname}[1]{\textbf{#1}\\}
+\newcommand{\companyaddress}[1]{#1}
+\newcommand{\currentdate}[1]{\raggedleft #1}
+\newcommand{\lettercontent}[1]{\par #1 \par}
+\newcommand{\closing}[1]{\par #1}
+\newcommand{\signature}[1]{\par #1}
+
+% Signature block: prefer an image (e.g. figures/signature.png) and fall
+% back to a printed typed name and title. Templates should call this with
+% three args: path-to-image, printed-name, printed-title. The parser
+% will replace common signature filenames with a user-provided
+% `signature_image` path from `user_info.yml` when available.
+\newcommand{\signatureblock}[3]{%
+  % Simple left-aligned signature insertion. Avoid enclosing boxes or
+  % minipages so the signature prints immediately after the preceding
+  % paragraph/closing.
+  \noindent
+  % If an image exists at the provided path, render it; otherwise leave
+  % a consistent vertical gap so layout doesn't jump.
+  \IfFileExists{#1}{%
+    \includegraphics[height=1.2cm]{#1}\par\vspace{4pt}
+  }{%
+    \vspace{1.2cm}\par\vspace{4pt}
+  }%
+  {\small\textbf{#2}\\#3}%
+}
+
+\begin{document}
+
+% ============================================================
+% HEADER - Your contact information
+% ============================================================
+\noindent
+\begin{minipage}[t]{0.06\textwidth}
+  \colorbox{accent}{\parbox[c][0.12\textheight][c]{\linewidth}{}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.72\textwidth}
+  {\LARGE\bfseries {{YOUR_FULL_NAME}}}\\
+  {\small {{YOUR_JOB_TITLE}}}\\
+  {\small\color{muted}{{YOUR_TAGLINE_OR_EDUCATION}}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.18\textwidth}
+  \raggedleft
+  % Try several possible profile picture filenames (PNG/JPG/JPEG or named files)
+  % Parser normalizes ../figures/ -> figures/ so reference figures/ here.
+  \IfFileExists{figures/profile-pic.png}{%
+    \profilepic{figures/profile-pic.png}\\[1pt]
+  }{%
+    \IfFileExists{figures/profile-pic.jpg}{%
+      \profilepic{figures/profile-pic.jpg}\\[1pt]
+    }{%
+      \IfFileExists{figures/profile-pic.jpeg}{%
+        \profilepic{figures/profile-pic.jpeg}\\[1pt]
+      }{%
+        \IfFileExists{figures/profile_placeholder.png}{%
+          \profilepic{figures/profile_placeholder.png}\\[1pt]
+        }{%
+          % Fallback: empty box placeholder (keeps layout)
+          \fbox{\rule{0pt}{\profilepicsize}\rule{\profilepicsize}{0pt}}\\[1pt]
+        }%
+      }%
+    }%
+  }%
+  % close the minipage started for the profile picture area
+  \end{minipage}
+\noindent\rule{\linewidth}{0.5pt}\\[4pt]
+
+% ============================================================
+% CONTACT INFO \& DATE
+% ============================================================
+\begin{minipage}[t]{0.6\textwidth}
+  \small
+  % Use the main font (not monospace) and muted color for contact items.
+  % \mbox prevents awkward line breaks inside the contact tokens.
+  \faEnvelope\ \href{mailto:{{YOUR_EMAIL}}}{\mbox{\color{muted}{{{YOUR_EMAIL}}}}}\\
+  \faPhone\ \href{tel:{{YOUR_PHONE_TEL}}}{\mbox{\color{muted}{{{YOUR_PHONE}}}}}\\
+  % LinkedIn uses the branded color for emphasis but still the main font.
+  \faLinkedin\ \href{{{YOUR_LINKEDIN_URL}}}{\mbox{\color{linkedin}{{{YOUR_LINKEDIN}}}}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.38\textwidth}
+  \begin{flushright}
+    \small\color{muted}{{DATE}}
+  \end{flushright}
+\end{minipage}
+
+\vspace{8pt}
+
+% ============================================================
+% RECIPIENT INFO
+% ============================================================
+\begin{minipage}[t]{0.5\textwidth}
+  % Use explicit placeholders: COMPANY_NAME and JOB_TITLE
+  \companyname{{{COMPANY_NAME}}}\\
+  % Render job title as a single-line bold block (no wrapping), without background
+  \companyaddress{\mbox{\textbf{\large {{{JOB_TITLE}}}}}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}
+  % empty
+\end{minipage}
+
+\vspace{6pt}
+% LETTER CONTENT - Replace with your text
+% ============================================================
+\lettercontent{Dear {{RECIPIENT_NAME}},}
+
+\lettercontent{
+{{PARAGRAPH_1_INTRODUCTION}}
+}
+
+\lettercontent{
+{{PARAGRAPH_2_TECHNICAL_EXCELLENCE}}
+}
+
+\lettercontent{
+{{PARAGRAPH_3_EXPERIENCE_AND_VALUE}}
+}
+
+\lettercontent{
+{{PARAGRAPH_4_STRATEGIC_FIT}}
+}
+
+\lettercontent{
+{{PARAGRAPH_5_CLOSING_STATEMENT}}
+}
+
+% ============================================================
+% CLOSING & SIGNATURE
+% ============================================================
+\vspace{8pt}
+\closing{{{CLOSING_SALUTATION}}}\par\nobreak
+% Use the signatureblock macro. Templates reference a common signature file
+% `figures/signature.png` so the parser can swap in a user-provided
+% `signature_image` path from user_info.yml (see parse_md_to_tex.py).
+\signatureblock{figures/signature.png}{{{YOUR_FULL_NAME}}}{{{YOUR_JOB_TITLE}}}
+
+\end{document}

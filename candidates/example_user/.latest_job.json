@@ -1,0 +1,9 @@
+{
+  "description": "This file tracks the latest job folder path for the n8n workflow",
+  "usage": "The n8n workflow reads this file to know which job folder to process",
+  "jobs": [
+    {
+      "jobFilePath": "/workspace/jobs/candidates/example_user/0_inbox-jobs/2025-01-15"
+    }
+  ]
+}

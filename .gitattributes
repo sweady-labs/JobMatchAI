@@ -1,0 +1,24 @@
+# Auto-detect text files and normalize line endings to LF in repository
+* text=auto
+
+# Force LF line endings for shell scripts (required for WSL/Unix)
+*.sh text eol=lf
+
+# Force LF for Makefiles
+Makefile text eol=lf
+**/Makefile text eol=lf
+
+# Python files
+*.py text eol=lf
+
+# Markdown, YAML, JSON
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+
+# LaTeX files
+*.tex text eol=lf
+*.cls text eol=lf
+*.sty text eol=lf
+*.bib text eol=lf

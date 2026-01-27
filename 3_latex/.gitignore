@@ -1,0 +1,54 @@
+# LaTeX Build Files - All intermediate compilation files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.xdv
+
+# Build directory - ignore generated contents but allow the directory and
+# specific placeholder file to be tracked. Use 'build/*' so we can re-include
+# an explicit file inside the directory (negation below).
+build/*
+
+# Output directory - ignore generated contents (PDFs) but allow the
+# placeholder file to be tracked via the negation rule below.
+output/*
+
+# Keep placeholder files tracked so the folders exist in git even though
+# their contents (logs, generated PDFs) are ignored. The negation allows
+# the specific .gitkeep files to be committed while keeping build/ and
+# output/ contents ignored.
+!build/.gitkeep
+!output/.gitkeep
+
+# Ignore all PDFs by default but allow PDFs kept in the templates folder
+# This keeps built PDFs out of git, while letting template example PDFs be
+# committed (for review or examples). Patterns are rooted at this folder.
+*.pdf
+!src/templates/*.pdf
+# Allow final/compiled PDFs in the output/ folder to be tracked (e.g. reports)
+!output/*.pdf
+!output/**/*.pdf
+
+# MacOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Editor temporary files
+*~
+*.swp
+*.swo
+.*.swp

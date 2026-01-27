@@ -1,0 +1,65 @@
+# Environment variables
+.env
+.env.local
+*.env
+
+# Sensitive personal data - NEVER COMMIT THESE
+**/PERSONAL/
+**/PRIVATE/
+*_PERSONAL.md
+*_PRIVATE.md
+3_latex/user_info.yml              # Personal contact info (use user_info.example.yml as template)
+3_latex/figures/*_signature*.png   # Personal signatures
+3_latex/figures/*_signature*.jpg
+candidates/*/1_profile/competence-profile.md  # Real profiles (keep example only)
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# n8n data (stores credentials and sensitive workflow data)
+n8n_data/
+4_n8n/n8n_data/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# IDE settings
+.vscode/
+.idea/
+*.iml
+
+# LaTeX auxiliary files (already covered in 3_latex/.gitignore but added here too)
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Ignore local docker-compose for n8n (machine-specific)
+# 4_n8n/docker-compose.yml  # Uncomment if you want to keep docker-compose local
+
+# Build outputs
+3_latex/build/
+3_latex/output/

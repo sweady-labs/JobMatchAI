@@ -1,0 +1,155 @@
+% !TeX spellcheck = en_GB
+% !TeX program = pdflatex
+%
+% LuxSleek-CV Template with Placeholders
+\documentclass[10pt, a4paper]{article} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}  
+\usepackage[left = 99mm, right = 15mm, top = 10mm, bottom = 10mm, nomarginpar]{geometry}
+\usepackage[stretch = 25, shrink = 25]{microtype}  
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{enumitem}
+\setlist{parsep = 0pt, topsep = 0pt, partopsep = 1pt, itemsep = 1pt, leftmargin = 6mm}
+% Configure itemize to use filled round bullets
+\renewcommand{\labelitemi}{$\bullet$}
+\renewcommand{\labelitemii}{$\bullet$}
+\renewcommand{\labelitemiii}{$\bullet$}
+\renewcommand{\labelitemiv}{$\bullet$}
+
+{{MAIN_FONT_SETUP}}
+
+% Font substitutions for better compatibility
+% Uppercase with expanded letterspacing, force sans-serif (avoid \scshape small-caps fallback)
+\DeclareRobustCommand{\spacedallcaps}[1]{\sffamily\textls[160]{\MakeUppercase{#1}}}
+
+\definecolor{cvblue}{HTML}{304263}
+% Muted grey for reduced meta text (company / dates) - readable on white
+\definecolor{cvmuted}{HTML}{666666}
+
+% Improve line breaking
+\sloppy
+\emergencystretch=3em
+
+%%%%%%% USER COMMAND DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\dates}[1]{\hfill\mbox{\textbf{\detokenize{#1}}}}
+\newcommand{\is}{\par\vskip.5ex plus .4ex}
+\newcommand{\smaller}[1]{{\footnotesize$\diamond$\ #1}}
+% Reduced-size text (~25% smaller than normal). Use for company/university and dates.
+% Render reduced text in a muted grey so it's clearly distinct from body text but still readable.
+\newcommand{\reducedtext}[1]{{\scriptsize\textcolor{cvmuted}{#1}}}
+% Reduced-size text in white (for sidebar sections like job title)
+\newcommand{\reducedtextwhite}[1]{{\scriptsize\textcolor{white}{#1}}}
+\newcommand{\headleft}[1]{\vspace*{3ex}{\sffamily\bfseries\spacedallcaps{#1}}\par%
+  \vspace*{-1.5ex}\hrulefill\par\vspace*{0.7ex}}
+\newcommand{\headright}[1]{\vspace*{2.5ex}{\sffamily\large\bfseries\color{cvblue}\spacedallcaps{#1}}\par%
+  \vspace*{-2ex}{\color{cvblue}\hrulefill}\par\vspace*{1ex}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use colored links that match the CV accent color so links are visible
+\usepackage[colorlinks = true, urlcolor = cvblue, linkcolor = cvblue]{hyperref}
+
+% Create sidebar background on every page using eso-pic (more reliable)
+\usepackage{eso-pic}
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \begin{tikzpicture}
+      % Main sidebar (full height)
+      \fill[cvblue!90] (0,0) rectangle (89mm,\paperheight);
+      % Top bar (darker shade)
+      \fill[cvblue] (0,\paperheight) rectangle (89mm,\paperheight-5mm);
+    \end{tikzpicture}
+  }%
+}
+
+\begin{document}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8ex}
+\setlength{\rightskip}{0pt plus 1fil} % Allow flexible right margin
+\pagestyle{empty}
+
+% SIDEBAR CONTENT (first page only) - using absolute positioning
+\vspace*{-10mm}
+\hspace*{-99mm}%
+\begin{minipage}[t][\textheight][t]{75mm}
+  \color{white}
+  \raggedright
+  \hspace*{5mm}\begin{minipage}[t]{70mm}
+  \vspace*{12mm}
+  
+  % Center the candidate name above the profile picture
+  \begin{center}
+  {\large {{FIRST_NAME}} \textbf{\textsc{{{LAST_NAME}}}}}\\
+  \vspace{1mm}
+  \reducedtextwhite{{{JOB_TITLE}}}
+  \end{center}
+  
+  % Profile picture: prefer the user-specified profile image if it exists.
+  % Inserted between the name and the Profile Summary header.
+  \vspace{2mm}
+    \IfFileExists{{{PROFILE_PICTURE}}}{%
+      \begin{center}
+        % Circular portrait clipped using TikZ with a thin white ring
+        \begin{tikzpicture}
+          % clip to a circle of radius 15mm (image width 30mm)
+          \clip (0,0) circle (15mm);
+          \node at (0,0) {\includegraphics[width=30mm,keepaspectratio]{{{PROFILE_PICTURE}}}};
+          % draw white ring around the clipped image
+          \draw[line width=1.2pt, white] (0,0) circle (15mm);
+  \end{tikzpicture}\\
+      \end{center}
+    }{%
+      % no profile picture found - continue without image
+    }
+
+  \headleft{Profile Summary}
+  {{ABOUT_ME}}
+  
+  \headleft{Contact details}
+  \footnotesize
+  \mbox{\faEnvelope}\ {\footnotesize {{EMAIL}}} \\
+  \mbox{\faPhone}\ {{PHONE}} \\
+  \mbox{\faMapMarker}\ {{LOCATION}} \\
+  \small
+  
+  \headleft{Personal information}
+  Citizenship: \textbf{{{NATIONALITY}}} \\[0.5ex]
+  Birth Year: \textbf{{{BIRTH_YEAR}}} \\[0.5ex]
+  Languages: {{LANGUAGES_LIST}}
+  
+  \headleft{Skills}
+  \begin{itemize}
+  {{SKILLS_LIST}}
+  \end{itemize}
+  
+  \headleft{Interests}
+  \begin{itemize}
+  {{INTERESTS}}
+  \end{itemize}
+\end{minipage}
+  \end{minipage}%
+\vspace*{-\textheight}
+
+% MAIN CONTENT (right side, flows across pages)
+\headright{Professional Experience}
+
+{{EXPERIENCE_ENTRIES}}
+
+\headright{Education}
+
+{{EDUCATION_ENTRIES}}
+
+\headright{Certifications}
+
+{{CERTIFICATIONS}}
+
+\headright{Publications \& Research Output}
+
+{{PUBLICATIONS_SECTION}}
+
+\end{document}

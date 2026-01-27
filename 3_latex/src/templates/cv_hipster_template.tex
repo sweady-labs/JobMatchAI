@@ -1,0 +1,163 @@
+% a mashup of hipstercv, friggeri and twenty cv
+% https://www.latextemplates.com/template/twenty-seconds-resumecv
+% https://www.latextemplates.com/template/friggeri-resume-cv
+
+\documentclass[lighthipster]{simplehipstercv}
+% available options are: darkhipster, lighthipster, pastel, allblack, grey, verylight, withoutsidebar
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1cm, a4paper]{geometry}
+
+{{MAIN_FONT_SETUP}}
+
+%------------------------------------------------------------------ Variables
+
+\newlength{\rightcolwidth}
+\newlength{\leftcolwidth}
+\setlength{\leftcolwidth}{0.23\textwidth}
+\setlength{\rightcolwidth}{0.75\textwidth}
+
+%------------------------------------------------------------------
+\title{{{DOCUMENT_TITLE}}}
+\author{{{FULL_NAME}}}
+\date{\today}
+
+\pagestyle{empty}
+\begin{document}
+
+\thispagestyle{empty}
+%-------------------------------------------------------------
+
+\section*{Start}
+
+\simpleheader{headercolour}{{{FIRST_NAME}}}{{{LAST_NAME}}}{{{JOB_TITLE}}}{white}
+
+%------------------------------------------------
+
+% this has to be here so the paracols starts..
+\subsection*{}
+\vspace{4em}
+
+\setlength{\columnsep}{1.5cm}
+\columnratio{0.23}[0.75]
+\begin{paracol}{2}
+\hbadness5000
+%\backgroundcolor{c[1]}[rgb]{1,1,0.8} % cream yellow for column-1 
+%\backgroundcolor{g}[rgb]{0.8,1,1} 
+%\backgroundcolor{l}[rgb]{0,0,0.7} % dark blue for left margin
+
+\paracolbackgroundoptions
+
+% 0.9,0.9,0.9 -- 0.8,0.8,0.8
+
+\footnotesize
+{\setasidefontcolour
+\flushright
+% Profile picture section - comment out if no picture available
+% \begin{center}
+%     \roundpic{{{PROFILE_PICTURE}}}
+% \end{center}
+
+\bg{cvgreen}{white}{About me}\\[0.5em]
+
+{\footnotesize
+{{ABOUT_ME}}
+}
+\bigskip
+
+\bg{cvgreen}{white}{Personal} \\[0.5em]
+{{PERSONAL_INFO}}
+
+\bigskip
+
+\bg{cvgreen}{white}{Areas of specialization} \\[0.5em]
+
+{{SPECIALIZATIONS}}
+
+\bigskip
+
+\bg{cvgreen}{white}{Interests}\\[0.5em]
+
+{{INTERESTS}}
+
+\bigskip
+
+\bg{cvgreen}{white}{Technical Skills}\\[0.5em]
+
+{{TECHNICAL_SKILLS}}
+
+\vspace{4em}
+
+{{CONTACT_BUBBLES}}
+
+\phantom{turn the page}
+
+\phantom{turn the page}
+}
+%-----------------------------------------------------------
+\switchcolumn
+
+\small
+\section*{Short Resumé}
+
+\begin{tabular}{r| p{0.5\textwidth} c}
+{{SHORT_RESUME}}
+\end{tabular}
+\vspace{3em}
+
+\begin{minipage}[t]{0.35\textwidth}
+\section*{Education}
+\begin{tabular}{r p{0.6\textwidth} c}
+{{EDUCATION_ENTRIES}}
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.3\textwidth}
+\section*{Programming}
+\begin{tabular}{r @{\hspace{0.5em}}l}
+{{PROGRAMMING_SKILLS}}
+\end{tabular}
+\end{minipage}
+
+\section*{Experience}
+
+\begin{tabular}{r| p{0.5\textwidth} c}
+{{EXPERIENCE_ENTRIES}}
+\end{tabular}
+\vspace{3em}
+
+\begin{minipage}[t]{0.3\textwidth}
+\section*{Certifications}
+\begin{tabular}{>{\footnotesize\bfseries}r >{\footnotesize}p{0.55\textwidth}}
+{{CERTIFICATIONS}}
+\end{tabular}
+\bigskip
+
+\section*{Languages}
+\begin{tabular}{l | ll}
+{{LANGUAGES}}
+\end{tabular}
+\bigskip
+
+\end{minipage}\hfill
+\begin{minipage}[t]{0.3\textwidth}
+{{PUBLICATIONS_SECTION}}
+\bigskip
+
+{{TALKS_SECTION}}
+\end{minipage}
+
+\vfill{} % Whitespace before final footer
+
+%----------------------------------------------------------------------------------------
+%	FINAL FOOTER
+%----------------------------------------------------------------------------------------
+\setlength{\parindent}{0pt}
+\begin{minipage}[t]{\rightcolwidth}
+\begin{center}\fontfamily{\sfdefault}\selectfont \color{black!70}
+{\small {{FOOTER_INFO}}
+}
+\end{center}
+\end{minipage}
+
+\end{paracol}
+
+\end{document}

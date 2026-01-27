@@ -1,0 +1,292 @@
+Recommended fonts for professional application letters (engineering):
+- Lato
+- Source Sans 3
+- TeX Gyre Heros
+- Avenir Next
+- Helvetica Neue
+- Arial
+- Times New Roman (serif option)
+- Futura (modern sans alternative)
+
+Use these family names with the Makefile FONT flag, e.g.: FONT="Lato"
+
+=== Available font families (one per line) ===
+378 .SF NS
+ 369 .SF Soft Numeric
+ 369 .SF Numeric
+  82 .SF Compact
+  82 .SF Adaptive Numeric
+  46 .SF Stencil Numeric
+  46 .SF NS Rounded
+  42 .New York Soft Numeric
+  42 .New York Numeric
+  31 .ADT Slab Numeric
+  28 .New York
+  27 .SF Rounded Numeric
+  18 Lato
+  18 .SF Adaptive Soft Numeric
+  18 .PingFang UI Watch TC
+  18 .PingFang UI Watch SC
+  18 .PingFang UI Watch MO
+  18 .PingFang UI Watch JA
+  18 .PingFang UI Watch HK
+  18 .PingFang UI TC
+  18 .PingFang UI SC
+  18 .PingFang UI MO
+  18 .PingFang UI JA
+  18 .PingFang UI HK
+  16 Source Sans 3
+  14 Helvetica Neue
+  12 Avenir Next Condensed
+  12 Avenir Next
+  12 Avenir
+  12 .SF NS Mono
+  10 Skia
+  10 Hiragino Sans
+  10 .SF Rail Rounded Numeric
+  10 .SF Rail Numeric
+  10 .SF Compact Rounded
+  10 .Hiragino Kaku Gothic Interface
+   9 Noto Serif Myanmar
+   9 Noto Sans Syriac
+   9 Noto Sans Myanmar
+   9 Noto Sans Kannada
+   9 Gill Sans
+   9 Apple SD Gothic Neo
+   9 .SF Telugu
+   9 .SF Tamil
+   9 .SF Odia
+   9 .SF Malayalam
+   9 .SF Kannada
+   9 .SF Hebrew Rounded
+   9 .SF Hebrew
+   9 .SF Gurmukhi
+   9 .SF Gujarati
+   9 .SF Georgian Rounded
+   9 .SF Georgian
+   9 .SF Devanagari
+   9 .SF Camera
+   9 .SF Bangla
+   9 .SF Armenian Rounded
+   9 .SF Armenian
+   9 .SF Arabic Rounded
+   9 .SF Arabic
+   9 .Apple SD Gothic NeoI
+   8 STIX Two Text
+   8 .PingFang Watch TC
+   8 .PingFang Watch SC
+   8 .PingFang Watch MO
+   8 .PingFang Watch HK
+   8 .PingFang TC
+   8 .PingFang SC
+   8 .PingFang MO
+   8 .PingFang HK
+   7 Mukta Mahee
+   7 American Typewriter
+   7 .CJK Symbols Fallback Watch TC
+   7 .CJK Symbols Fallback Watch SC
+   7 .CJK Symbols Fallback Watch MO
+   7 .CJK Symbols Fallback Watch JA
+   7 .CJK Symbols Fallback Watch HK
+   7 .CJK Symbols Fallback TC
+   7 .CJK Symbols Fallback SC
+   7 .CJK Symbols Fallback MO
+   7 .CJK Symbols Fallback JA
+   7 .CJK Symbols Fallback HK
+   7 .ADT Slab Soft Numeric
+   6 Sukhumvit Set
+   6 PingFang TC
+   6 PingFang SC
+   6 PingFang MO
+   6 PingFang HK
+   6 Helvetica
+   6 Charter
+   6 Baskerville
+   5 Optima
+   5 Kohinoor Telugu
+   5 Kohinoor Gujarati
+   5 Kohinoor Devanagari
+   5 Kohinoor Bangla
+   5 ITF Devanagari Marathi
+   5 ITF Devanagari
+   5 Hoefler Text
+   5 Futura
+   5 Damascus
+   5 Apple Braille
+   5 .Damascus PUA
+   4 Verdana
+   4 Trebuchet MS
+   4 Times New Roman
+   4 TeX Gyre Heros Cn
+   4 TeX Gyre Heros
+   4 Songti SC
+   4 Shree Devanagari 714
+   4 Rockwell
+   4 Palatino
+   4 PT Serif
+   4 PT Sans
+   4 New Peninim MT
+   4 Mshtakan
+   4 Menlo
+   4 Kefa III
+   4 Georgia
+   4 Galvji
+   4 Courier New
+   4 Cochin
+   4 Arial Narrow
+   4 Arial
+   3 Thonburi
+   3 Songti TC
+   3 Snell Roundhand
+   3 Muna
+   3 Euphemia UCAS
+   3 Didot
+   3 Copperplate
+   3 Chalkboard SE
+   3 Bodoni 72 Oldstyle
+   3 Bodoni 72
+   3 Arial Hebrew Scholar
+   3 Arial Hebrew
+   3 .ThonburiUIWatch
+   3 .ThonburiUI
+   3 .Muna PUA
+   3 .Geeza Pro Interface
+   3 .Arial Hebrew Desk Interface
+   2 Waseem
+   2 Telugu Sangam MN
+   2 Telugu MN
+   2 Tamil Sangam MN
+   2 Tamil MN
+   2 Tahoma
+   2 Sinhala Sangam MN
+   2 Sinhala MN
+   2 SignPainter
+   2 Raanana
+   2 Phosphate
+   2 Papyrus
+   2 PT Serif Caption
+   2 PT Sans Narrow
+   2 PT Sans Caption
+   2 PT Mono
+   2 Oriya Sangam MN
+   2 Oriya MN
+   2 Noto Sans Oriya
+   2 Noto Nastaliq Urdu
+   2 Noteworthy
+   2 Myanmar Sangam MN
+   2 Myanmar MN
+   2 Marker Felt
+   2 Malayalam Sangam MN
+   2 Malayalam MN
+   2 Lucida Grande
+   2 Lao MN
+   2 Khmer MN
+   2 Kannada Sangam MN
+   2 Kannada MN
+   2 Kailasa
+   2 InaiMathi
+   2 Hiragino Sans GB
+   2 Hiragino Mincho ProN
+   2 Heiti TC
+   2 Heiti SC
+   2 Gurmukhi Sangam MN
+   2 Gurmukhi MN
+   2 Gujarati Sangam MN
+   2 Gujarati MT
+   2 Grantha Sangam MN
+   2 Geeza Pro
+   2 Devanagari Sangam MN
+   2 Devanagari MT
+   2 Corsiva Hebrew
+   2 Comic Sans MS
+   2 Chalkboard
+   2 Bangla Sangam MN
+   2 Bangla MN
+   2 Al Nile
+   2 Al Bayan
+   2 .Noto Nastaliq Urdu UI
+   2 .Lucida Grande UI
+   2 .Hiragino Sans GB Interface
+   2 .Geeza Pro PUA
+   2 .DecoType Nastaleeq Urdu UI
+   2 .Aqua Kana
+   2 .Al Nile PUA
+   2 .Al Bayan PUA
+   1 Zapfino
+   1 Zapf Dingbats
+   1 Wingdings 3
+   1 Wingdings 2
+   1 Wingdings
+   1 Webdings
+   1 Trattatello
+   1 Symbol
+   1 Silom
+   1 Savoye LET
+   1 Sathu
+   1 Sana
+   1 STSong
+   1 STIX Two Math
+   1 Plantagenet Cherokee
+   1 Party LET
+   1 Noto Sans Tagalog
+   1 Noto Sans NKo
+   1 Noto Sans Batak
+   1 Nadeem
+   1 Monaco
+   1 Mishafi Gold
+   1 Mishafi
+   1 Microsoft Sans Serif
+   1 Luminari
+   1 Lao Sangam MN
+   1 KufiStandardGK
+   1 Krungthep
+   1 Kokonor
+   1 Khmer Sangam MN
+   1 Impact
+   1 Hiragino Maru Gothic ProN
+   1 Herculanum
+   1 Gurmukhi MT
+   1 Geneva
+   1 GB18030 Bitmap
+   1 Farisi
+   1 Farah
+   1 Diwan Thuluth
+   1 Diwan Kufi
+   1 DecoType Naskh
+   1 DIN Condensed
+   1 DIN Alternate
+   1 Chalkduster
+   1 Brush Script MT
+   1 Bradley Hand
+   1 Bodoni Ornaments
+   1 Bodoni 72 Smallcaps
+   1 Big Caslon
+   1 Beirut
+   1 Baghdad
+   1 Ayuthaya
+   1 Arial Unicode MS
+   1 Arial Rounded MT Bold
+   1 Arial Black
+   1 AppleMyungjo
+   1 AppleGothic
+   1 Apple Symbols
+   1 Apple Color Emoji
+   1 Apple Chancery
+   1 Andale Mono
+   1 Al Tarikh
+   1 Academy Engraved LET
+   1 .Times LT MM
+   1 .Savoye LET CC.
+   1 .Sana PUA
+   1 .Nadeem PUA
+   1 .LastResort
+   1 .KufiStandardGK PUA
+   1 .Keyboard
+   1 .Helvetica LT MM
+   1 .Farah PUA
+   1 .Diwan Kufi PUA
+   1 .DecoType Naskh PUA
+   1 .Beirut PUA
+   1 .Baghdad PUA
+   1 .Apple Color Emoji UI
+   1 .Al Tarikh PUA
