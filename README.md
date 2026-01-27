@@ -1,17 +1,9 @@
+
 # JobMatch AI - Application Letter Agent
 
-An AI-powered job application letter automation system that generates tailored, professional cover letters by combining your competence profile with job postings.
+An AI-powered job application automation system that generates tailored, professional cover letters by combining your competence profile with job postings.
 
 ![Application workflow overview](4_n8n/_pics/pic_wf.png)
-
----
-
-## What This Project Does
-
-1. **Collects job postings** - Save job descriptions as Markdown files
-2. **Maintains your profile** - Keep your skills, experience, and achievements up to date
-3. **Generates tailored letters** - AI creates customized application letters matching your profile to each job
-4. **Produces professional PDFs** - LaTeX templates compile polished, print-ready documents
 
 ---
 
@@ -20,16 +12,10 @@ An AI-powered job application letter automation system that generates tailored, 
 - [Quick Start (15 minutes)](#quick-start-15-minutes)
 - [Project Structure](#project-structure)
 - [Detailed Setup Guide](#detailed-setup-guide)
-  - [Step 1: Prerequisites](#step-1-prerequisites)
-  - [Step 2: Clone and Configure](#step-2-clone-and-configure)
-  - [Step 3: Set Up Your Profile](#step-3-set-up-your-profile)
-  - [Step 4: Configure n8n Workflow](#step-4-configure-n8n-workflow)
-  - [Step 5: Add a Job Posting](#step-5-add-a-job-posting)
-  - [Step 6: Generate Your Letter](#step-6-generate-your-letter)
-  - [Step 7: Create the PDF](#step-7-create-the-pdf)
 - [How It Works](#how-it-works)
 - [File Reference](#file-reference)
 - [Customization Guide](#customization-guide)
+- [Daily Workflow](#daily-workflow)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
@@ -113,7 +99,7 @@ JobMatchAI/
 
 ## Detailed Setup Guide
 
-### Step 1: Prerequisites
+### Prerequisites
 
 Install these tools before starting:
 
@@ -123,11 +109,10 @@ Install these tools before starting:
 | **Docker Desktop** | `brew install --cask docker` | [Download](https://www.docker.com/products/docker-desktop) | Runs n8n workflow engine |
 | **Python 3** | `brew install python` | [Download](https://www.python.org/downloads/) | Runs conversion scripts |
 | **LaTeX (XeLaTeX)** | `brew install --cask mactex` | [MiKTeX](https://miktex.org/download) | Compiles PDF documents |
-| **Text Editor** | VS Code recommended | VS Code recommended | Edit files |
 
-After installing, restart your terminal so the commands are available.
+After installing, restart your terminal.
 
-### Step 2: Clone and Configure
+### Clone and Configure
 
 ```bash
 # Clone the repository
@@ -148,10 +133,10 @@ Now edit `3_latex/user_info.yml` with your real information:
   job_title: Your Target Role
   linkedin_url: https://www.linkedin.com/in/yourprofile/
   location: Your City, Country
-  # ... fill in all fields (see comments in file for guidance)
+  # ... fill in all fields
 ```
 
-### Step 3: Set Up Your Profile
+### Set Up Your Profile
 
 Your **competence profile** is the key to great application letters. The AI uses this to match your skills to job requirements.
 
@@ -170,7 +155,7 @@ Your **competence profile** is the key to great application letters. The AI uses
 - Include both technical skills and soft skills
 - Update regularly as you gain new experience
 
-### Step 4: Configure n8n Workflow
+### Configure n8n Workflow
 
 n8n is the workflow automation engine that orchestrates the AI letter generation.
 
@@ -192,7 +177,7 @@ docker compose up -d
    - `path competence profile` node: Update the path to your profile
    - `reading json from "create-daily-folders"-workflow` node: Update the path to your `.latest_job.json`
 
-### Step 5: Add a Job Posting
+### Add a Job Posting
 
 1. Create a date folder for today:
    ```bash
@@ -209,7 +194,7 @@ docker compose up -d
 4. Fill in the metadata (company, location, salary if known)
 5. Save the file
 
-### Step 6: Generate Your Letter
+### Generate Your Letter
 
 1. Update `.latest_job.json` with the path to your job folder:
    ```json
@@ -224,7 +209,7 @@ docker compose up -d
 3. Wait for the AI to generate your letter (usually 10-30 seconds)
 4. Find the generated letter in `candidates/example_user/2_applications-mds/YYYY-MM-DD/`
 
-### Step 7: Create the PDF
+### Create the PDF
 
 Convert the generated Markdown letter to a professional PDF:
 
@@ -382,6 +367,18 @@ The AI prompt controls how letters are written. To customize:
 
 ---
 
+## Daily Workflow
+
+1. **Find a job posting** - LinkedIn, company websites, job boards
+2. **Save the job** - Create a markdown file in your `0_inbox-jobs/DATE/` folder
+3. **Update `.latest_job.json`** - Point to today's job folder
+4. **Run the workflow** - Execute in n8n, wait for generation
+5. **Review the letter** - Check the generated markdown, edit if needed
+6. **Generate PDF** - Run `make md2pdf` in the `3_latex/` folder
+7. **Send application** - Use the PDF, track in your job search spreadsheet
+
+---
+
 ## Troubleshooting
 
 ### n8n Can't Find Files
@@ -433,18 +430,6 @@ The AI prompt controls how letters are written. To customize:
 1. Verify your API key at https://platform.openai.com/api-keys
 2. Check your usage limits at https://platform.openai.com/usage
 3. Update the credential in n8n if you regenerated the key
-
----
-
-## Daily Workflow Checklist
-
-1. **Find a job posting** - LinkedIn, company websites, job boards
-2. **Save the job** - Create a markdown file in your `0_inbox-jobs/DATE/` folder
-3. **Update `.latest_job.json`** - Point to today's job folder
-4. **Run the workflow** - Execute in n8n, wait for generation
-5. **Review the letter** - Check the generated markdown, edit if needed
-6. **Generate PDF** - Run `make md2pdf` in the `3_latex/` folder
-7. **Send application** - Use the PDF, track in your job search spreadsheet
 
 ---
 
