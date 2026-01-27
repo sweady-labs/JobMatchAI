@@ -39,7 +39,7 @@ An AI-powered job application letter automation system that generates tailored, 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/JobMatchAI.git
+git clone https://github.com/sweady1989/JobMatchAI
 cd JobMatchAI
 
 # 2. Copy example files to create your configuration
@@ -131,7 +131,7 @@ After installing, restart your terminal so the commands are available.
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/JobMatchAI.git
+git clone https://github.com/sweady1989/JobMatchAI
 cd JobMatchAI
 
 # Create your personal configuration (this file is gitignored)
