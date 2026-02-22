@@ -25,7 +25,7 @@ An AI-powered job application automation system that generates tailored, profess
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/sweady1989/JobMatchAI
+git clone https://github.com/sweady-labs/JobMatchAI
 cd JobMatchAI
 
 # 2. Copy example files to create your configuration
