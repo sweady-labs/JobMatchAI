@@ -1,0 +1,73 @@
+# Selbstbeschreibung für das zentrale Architekturmodell (sweady-labs/systemarchitektur).
+# Beim Ändern der Architektur hier mitpflegen — die CI sammelt diese Datei nächtlich ein.
+
+name: JobMatchAI
+zweck: Erzeugt automatisiert massgeschneiderte Bewerbungsanschreiben, indem ein n8n-Workflow Stellenanzeige,
+  eigenes Kompetenzprofil und einen ATS-optimierten Prompt zusammenfuehrt, an ein OpenAI-Modell schickt
+  und das Ergebnis ueber eine Markdown-zu-LaTeX-Kette als PDF ausgibt.
+system: bewerbung
+status: aktiv
+laeuft_auf:
+- mac
+bausteine:
+- name: n8n
+  art: container
+  zweck: 'Workflow-Engine, die Stellenanzeige + Kompetenzprofil + Prompt zusammenfuehrt, an OpenAI schickt
+    und das Ergebnis ins Repo schreibt (4_n8n/docker-compose.yml:21-58). Volumes: ./n8n_data:/home/node/.n8n
+    (Zeile 50) und ../:/workspace/jobs (Zeile 58, also das Repo selbst).'
+  technologie: n8nio/n8n:latest
+  port: 5678:5678
+bietet_an:
+- name: n8n-Weboberflaeche
+  art: webseite
+  zweck: Import und manuelle Ausfuehrung des Workflows application-letter-agent (4_n8n/docker-compose.yml:26,42)
+  adresse: http://localhost:5678
+- name: Generierte Anschreiben (Markdown)
+  art: datei
+  zweck: Vom Modell erzeugte Anschreiben mit LaTeX-Markern, geschrieben vom Workflow-Knoten 'write generated
+    letters to repo'
+  adresse: candidates/<person>/2_applications-mds/<datum>/*.md
+- name: Fertige Bewerbungs-PDFs
+  art: datei
+  zweck: Ergebnis von 'make md2pdf' (Makefile -> 3_latex/Makefile, XeLaTeX)
+  adresse: 3_latex/output/*.pdf
+- name: Prompt- und Query-Vorlagen
+  art: datei
+  zweck: ATS-optimierte GPT-Prompts und LinkedIn-Suchquery-Bausteine zur Wiederverwendung
+  adresse: 0_queries&prompts/
+nutzt:
+- ziel: OpenAI-API
+  art: http
+  zweck: Erzeugt aus Prompt, Stellenanzeige und Kompetenzprofil den Anschreibentext
+  beleg: '4_n8n/application-letter-agent.json:114 ("value": "gpt-5-mini"), :128 (Node-Typ @n8n/n8n-nodes-langchain.openAi),
+    :137 (Credential openAiApi)'
+daten:
+- was: Kompetenzprofil (Lebenslaufdaten, Arbeitgeber, Projekte)
+  wo: candidates/<person>/1_profile/competence-profile.md, per .gitignore:15 ausgeschlossen; nur example_user
+    ist eingecheckt
+  schutzbedarf: personenbezogen
+- was: Kontaktdaten fuer die LaTeX-Vorlagen (Name, E-Mail, Telefon, LinkedIn, Wohnort)
+  wo: 3_latex/user_info.yml, per .gitignore:11 ausgeschlossen; Vorlage ist 3_latex/user_info.example.yml
+  schutzbedarf: personenbezogen
+- was: Unterschriftenbilder
+  wo: 3_latex/figures/*_signature*.png|jpg, per .gitignore:12-13 ausgeschlossen
+  schutzbedarf: personenbezogen
+- was: Generierte Anschreiben und PDFs
+  wo: candidates/*/2_applications-mds/ und 3_latex/output/ (output zusaetzlich per .gitignore:62 ausgeschlossen)
+  schutzbedarf: personenbezogen
+- was: n8n-Datenverzeichnis inkl. gespeicherter OpenAI-Zugangsdaten
+  wo: Docker-Volume ./n8n_data -> /home/node/.n8n (4_n8n/docker-compose.yml:50), per .gitignore:31-32
+    ausgeschlossen
+  schutzbedarf: geheim
+- was: Gesammelte Stellenanzeigen als Markdown
+  wo: candidates/<person>/0_inbox-jobs/<datum>/*.md
+  schutzbedarf: intern
+doku:
+- pfad: README.md
+  inhalt: Was es kann und wie es bedient wird
+- pfad: 0_queries&prompts/README.md
+  inhalt: Was es kann und wie es bedient wird
+- pfad: 4_n8n/application_letter_cost_analysis.md
+  inhalt: Ergänzende Dokumentation
+- pfad: 3_latex/LaTeX_commands.md
+  inhalt: Ergänzende Dokumentation
